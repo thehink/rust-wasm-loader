@@ -35,7 +35,8 @@ module.exports = function(source) {
     release ? 'release' : 'debug'
   )
   const outFile = path.join(outDir, `${packageName}.js`)
-  const cmd = `cargo build --target=${rustTarget}${release ? ' --release' : ''} -- -Clink-args="-s NO_EXIT_RUNTIME=1 --memory-init-file 0"`
+  const cmd = `cargo rustc --target=${rustTarget}${release ? ' --release' : ''} -- -Clink-args="-s NO_EXIT_RUNTIME=1 --memory-init-file 0"`
+
   const self = this
   child_process.exec(cmd, { cwd: this.context }, function(
     error,

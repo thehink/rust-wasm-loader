@@ -35,7 +35,7 @@ module.exports = function(source) {
     release ? 'release' : 'debug'
   )
   const outFile = path.join(outDir, `${packageName}.js`)
-  const cmd = `cargo build --target=${rustTarget}${release ? ' --release' : ''}`
+  const cmd = `cargo build --target=${rustTarget}${release ? ' --release' : ''} -- -Clink-args="-s NO_EXIT_RUNTIME=1 --memory-init-file 0"`
   const self = this
   child_process.exec(cmd, { cwd: this.context }, function(
     error,
@@ -66,7 +66,7 @@ module.exports = function(source) {
     // This object is passed to the Emscripten 'glue' code
     const Module = {
       // Path in the built project to the wasm file
-      wasmBinaryFile: path.join(buildPath, `${packageName}.wasm`),
+      wasmBinaryFile: `${buildPath}${packageName}.wasm`,
       // Indicates that we are NOT running in node, despite 'require' being defined
       ENVIRONMENT: 'WEB',
     }
